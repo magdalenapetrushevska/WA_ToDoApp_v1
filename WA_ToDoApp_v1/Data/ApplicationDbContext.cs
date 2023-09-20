@@ -3,11 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Security.Cryptography.Xml;
 using WA_ToDoApp_v1.Models.DomainModels;
+using WA_ToDoApp_v1.Models.Identity;
 using Task = WA_ToDoApp_v1.Models.DomainModels.Task;
 
 namespace WA_ToDoApp_v1.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -26,6 +27,11 @@ namespace WA_ToDoApp_v1.Data
                 .HasOne(z => z.Project)
                 .WithMany(z => z.Tasks)
                 .HasForeignKey(z => z.ProjectId);
+
+            builder.Entity<Project>()
+                .HasOne(z => z.User)
+                .WithMany(z => z.Projects)
+                .HasForeignKey(z => z.UserId);
 
         }
     }
